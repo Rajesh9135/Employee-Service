@@ -30,7 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		request.getEmployee().setEmployeeId(UUID.randomUUID().toString());
 		try {
 			responseWrapper.setEmployee(employeeRepository.save(request.getEmployee()));
-		} catch (Exception e) {
+		} catch (AppException e) {
+	        throw e;
+	    }catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -48,7 +50,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if (employees.isEmpty())
 				throw new AppException(AppConstant.NOT_FOUND, "Employee not found ");
 			responseWrapper.setEmployees(employees);
-		} catch (Exception e) {
+		} catch (AppException e) {
+	        throw e;
+	    }catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -68,7 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee emp = employeeRepository.findById(employee).orElseThrow(
 					() -> new AppException(AppConstant.NOT_FOUND, "Employee not found with ID: " + employee));
 			responseWrapper.setEmployee(emp);
-		} catch (Exception e) {
+		}catch (AppException e) {
+	        throw e;
+	    } catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -88,7 +94,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 					() -> new AppException(AppConstant.NOT_FOUND, "Employee not found with ID: " + employeeId));
 			employeeRepository.deleteById(employeeId);
 			responseWrapper.setEmployee(emp);
-		} catch (Exception e) {
+		}catch (AppException e) {
+	        throw e;
+	    } catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -110,7 +118,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 					.setEmployeeName(request.getEmployee().getEmployeeName())
 					.setEmployeePhone(request.getEmployee().getEmployeePhone());
 			responseWrapper.setEmployee(employeeRepository.save(request.getEmployee()));
-		} catch (Exception e) {
+		} catch (AppException e) {
+	        throw e;
+	    }catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
