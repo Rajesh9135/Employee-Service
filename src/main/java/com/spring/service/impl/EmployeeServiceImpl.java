@@ -112,7 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		try {
 			Employee emp = employeeRepository.findById(request.getEmployee().getEmployeeId())
 					.orElseThrow(() -> new AppException(AppConstant.NOT_FOUND,
-							"Employee not found with ID: " + request.getEmployee().toString()));
+							"Employee not found with ID: " + request.getEmployee().getEmployeeId().toString()));
 			emp.setEmployeeAddress(request.getEmployee().getEmployeeAddress())
 					.setEmployeeEmail(request.getEmployee().getEmployeeEmail())
 					.setEmployeeName(request.getEmployee().getEmployeeName())
@@ -124,7 +124,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
-		Response response = new Response(AppConstant.CREATED, AppConstant.SUCCESS);
+		Response response = new Response(AppConstant.OK, AppConstant.SUCCESS);
 		responseWrapper.setResponse(response);
 		return responseWrapper;
 	}
