@@ -29,10 +29,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 		ResponseWrapper responseWrapper = new ResponseWrapper();
 		request.getEmployee().setEmployeeId(UUID.randomUUID().toString());
 		try {
-			responseWrapper.setEmployee(employeeRepository.save(request.getEmployee()));
+			Employee employee = request.getEmployee();
+			if (employee.getSalary() != null && !employee.getSalary().isEmpty())
+				employee.getSalary().forEach(salary -> {
+					salary.setId(UUID.randomUUID().toString());
+					salary.setEmployee(employee);
+				});
+
+			responseWrapper.setEmployee(employeeRepository.save(employee));
 		} catch (AppException e) {
-	        throw e;
-	    }catch (Exception e) {
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -51,8 +58,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 				throw new AppException(AppConstant.NOT_FOUND, "Employee not found ");
 			responseWrapper.setEmployees(employees);
 		} catch (AppException e) {
-	        throw e;
-	    }catch (Exception e) {
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -72,9 +79,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee emp = employeeRepository.findById(employee).orElseThrow(
 					() -> new AppException(AppConstant.NOT_FOUND, "Employee not found with ID: " + employee));
 			responseWrapper.setEmployee(emp);
-		}catch (AppException e) {
-	        throw e;
-	    } catch (Exception e) {
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -94,9 +101,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 					() -> new AppException(AppConstant.NOT_FOUND, "Employee not found with ID: " + employeeId));
 			employeeRepository.deleteById(employeeId);
 			responseWrapper.setEmployee(emp);
-		}catch (AppException e) {
-	        throw e;
-	    } catch (Exception e) {
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}
@@ -116,11 +123,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			emp.setEmployeeAddress(request.getEmployee().getEmployeeAddress())
 					.setEmployeeEmail(request.getEmployee().getEmployeeEmail())
 					.setEmployeeName(request.getEmployee().getEmployeeName())
-					.setEmployeePhone(request.getEmployee().getEmployeePhone());
+					.setEmployeePhone(request.getEmployee().getEmployeePhone())
+					.setSalary(request.getEmployee().getSalary());
 			responseWrapper.setEmployee(employeeRepository.save(request.getEmployee()));
 		} catch (AppException e) {
-	        throw e;
-	    }catch (Exception e) {
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AppException(AppConstant.INTERNAL_SERVER_ERROR, AppConstant.ERROR);
 		}

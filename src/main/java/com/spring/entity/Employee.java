@@ -1,8 +1,19 @@
 package com.spring.entity;
 
+import java.util.List;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +25,7 @@ import lombok.experimental.Accessors;
 @Table(name = "employee")
 @Data
 @Accessors(chain = true)
+@JsonInclude(Include.NON_NULL)
 public class Employee {
 
 	@Id
@@ -37,4 +49,8 @@ public class Employee {
 	@Size(max = 255, message = "Employee Address must be less than or equal to 255 characters")
 	@NotBlank(message = "Address cannot be blank")
 	private String employeeAddress;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "employee")
+	@Fetch(FetchMode.SUBSELECT)
+	private List<Salary> salary;
 }
