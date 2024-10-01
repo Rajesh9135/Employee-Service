@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Table(name = "salary")
 @Data
 @Accessors(chain = true)
-public class Salary {
+public class SalaryModel {
 
 	@Id
     @Column(name = "id")

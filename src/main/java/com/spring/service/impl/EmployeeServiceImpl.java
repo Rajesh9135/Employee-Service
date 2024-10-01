@@ -28,17 +28,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseWrapper saveEmployee(Request request) {
+		log.info("[ Create a employee ] [Request Body : " + request.toString() + "]");
 		ResponseWrapper responseWrapper = new ResponseWrapper();
 		request.getEmployee().setEmployeeId(UUID.randomUUID().toString());
-		log.info("[ Create a employee ] [Request Body : "+request.toString()+"]");
+		
+		Employee employee = request.getEmployee();
+		
+		if (employee.getSalary() != null && !employee.getSalary().isEmpty())
+			employee.getSalary().forEach(salary -> {
+				salary.setId(UUID.randomUUID().toString());
+				salary.setEmployee(employee);
+			});
 		try {
-			Employee employee = request.getEmployee();
-			if (employee.getSalary() != null && !employee.getSalary().isEmpty())
-				employee.getSalary().forEach(salary -> {
-					salary.setId(UUID.randomUUID().toString());
-					salary.setEmployee(employee);
-				});
-
 			responseWrapper.setEmployee(employeeRepository.save(employee));
 		} catch (AppException e) {
 			throw e;
@@ -79,7 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new AppException(AppConstant.BAD_REQUEST, "Employee id cannot be blank");
 
 		ResponseWrapper responseWrapper = new ResponseWrapper();
-		log.info("[ Get employee by employeeid ] [employeeid : "+employee+"]");
+		log.info("[ Get employee by employeeid ] [employeeid : " + employee + "]");
 		try {
 			Employee emp = employeeRepository.findById(employee).orElseThrow(
 					() -> new AppException(AppConstant.NOT_FOUND, AppConstant.EMP_NOT_FOUND_WITH_ID + employee));
@@ -101,7 +102,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (employeeId == null || "".equalsIgnoreCase(employeeId))
 			throw new AppException(AppConstant.BAD_REQUEST, "Employee id cannot be blank");
 		ResponseWrapper responseWrapper = new ResponseWrapper();
-		log.info("[ Delete employee by employeeid ] [employeeid : "+employeeId+"]");
+		log.info("[ Delete employee by employeeid ] [employeeid : " + employeeId + "]");
 		try {
 			Employee emp = employeeRepository.findById(employeeId).orElseThrow(
 					() -> new AppException(AppConstant.NOT_FOUND, "Employee not found with ID: " + employeeId));
@@ -122,7 +123,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseWrapper updateEmployee(Request request) {
 		ResponseWrapper responseWrapper = new ResponseWrapper();
-		log.info("[ Update a employee ] [Request Body : "+request.toString()+"]");
+		log.info("[ Update a employee ] [Request Body : " + request.toString() + "]");
 		try {
 			Employee emp = employeeRepository.findById(request.getEmployee().getEmployeeId())
 					.orElseThrow(() -> new AppException(AppConstant.NOT_FOUND,

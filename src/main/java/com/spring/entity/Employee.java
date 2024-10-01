@@ -52,5 +52,5 @@ public class Employee {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "employee")
 	@Fetch(FetchMode.SUBSELECT)
-	private List<Salary> salary;
+	private List<SalaryModel> salary;
 }

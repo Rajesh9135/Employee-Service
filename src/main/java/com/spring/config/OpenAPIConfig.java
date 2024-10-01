@@ -14,20 +14,17 @@ import io.swagger.v3.oas.models.servers.Server;
 public class OpenAPIConfig {
 
 	@Bean
-	   public OpenAPI defineOpenApi() {
-	       Server server = new Server();
-	       server.setUrl("http://localhost:1212/employee");
-	       server.setDescription("Development");
+	protected OpenAPI defineOpenApi() {
+		Server server = new Server();
+		server.setUrl("http://localhost:1212/employee");
+		server.setDescription("Development");
 
-	       Contact myContact = new Contact();
-	       myContact.setName("Rajesh Kumar");
-	       myContact.setEmail("rajesh.kumar.bijender@gmail.com");
+		Contact myContact = new Contact();
+		myContact.setName("Rajesh Kumar");
+		myContact.setEmail("rajesh.kumar.bijender@gmail.com");
 
-	       Info information = new Info()
-	               .title("Employee Management System API")
-	               .version("1.0")
-	               .description("This API exposes endpoints to manage employees.")
-	               .contact(myContact);
-	       return new OpenAPI().info(information).servers(List.of(server));
-	   }
+		Info information = new Info().title("Employee Management System API").version("1.0")
+				.description("This API exposes endpoints to manage employees.").contact(myContact);
+		return new OpenAPI().info(information).servers(List.of(server));
+	}
 }
