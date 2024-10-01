@@ -1,6 +1,10 @@
 package com.spring.constant;
 
-public interface AppConstant {
+public class AppConstant {
+
+	private AppConstant() {
+		
+	}
 	
 	public static final Integer OK=200;
 	public static final Integer RETRIEVED=200;
@@ -11,6 +15,7 @@ public interface AppConstant {
 	
 	public static final Integer BAD_REQUEST=400;
 	public static final Integer NOT_FOUND=404;
+	public static final String EMP_NOT_FOUND_WITH_ID="Employee not found with ID: ";
 	public static final Integer INTERNAL_SERVER_ERROR=500;
 	
 	public static final String ERROR="Internal server error";
